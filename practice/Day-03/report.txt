@@ -1,0 +1,5 @@
+--- TELEBIRR TRANSACTION SUMMARY ---
+Customer: Aster | Total Spent: 600.00 ETB
+Customer: Abebe | Total Spent: 500.00 ETB
+Customer: Hadiya | Total Spent: 400.00 ETB
+Customer: Dawit | Total Spent: 300.00 ETB

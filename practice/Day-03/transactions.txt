@@ -1,0 +1,6 @@
+Hadiya,250
+Abebe,400
+Hadiya,150
+Aster,600
+Abebe,100
+Dawit,300
