@@ -1,5 +1,4 @@
 # Day 2: TeleBirr Tip Calculator
-# Program to split a restaurant bill with friends, including a tip.
 
 # 1. Store a bill total (ETB) and number of people in variables
 total_bill = 1250.00  # Amount in Ethiopian Birr (ETB)

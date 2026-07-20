@@ -1,5 +1,4 @@
 # Day 4: Addis Bank — Account Management System (Version 1)
-# Introducing Object-Oriented Programming, Encapsulation, and Properties
 
 class Account:
     def __init__(self, owner, account_number, balance=0.0):
@@ -65,10 +64,10 @@ if __name__ == "__main__":
         print("Attempting to withdraw more than the balance...")
         acc2.withdraw(1000)
     except ValueError as e:
-        print(f"❌ Error Caught: {e}")
+        print(f" Error Caught: {e}")
 
     try:
         print("Attempting to deposit a negative amount...")
         acc2.deposit(-150)
     except ValueError as e:
-        print(f"❌ Error Caught: {e}")
+        print(f" Error Caught: {e}")

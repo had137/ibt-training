@@ -1,7 +1,5 @@
 # Day 3: Pharmacy Inventory Tracker
-# IBT College Canada - CodeOps Program
 
-# File paths
 stock_file = "practice/Day-03/stock.txt"
 
 # 1. Read stock.txt into a dictionary, inside a try/except block
@@ -32,7 +30,7 @@ low_stock = [item for item, qty in stock.items() if qty < 10]
 print("\n--- Low Stock Alert (Below 10) ---")
 if low_stock:
     for item in low_stock:
-        print(f"⚠️ Warning: {item} is low on stock! (Current: {stock[item]})")
+        print(f"Warning: {item} is low on stock! (Current: {stock[item]})")
 else:
     print("All stock levels are healthy!")
 
