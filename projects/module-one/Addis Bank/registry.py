@@ -1,5 +1,6 @@
-# Day 6: Addis Bank — Refactor with Patterns
-# Deliverable: bank.py (SOLID + Observer Pattern + AccountFactory)
+# Day 7: Addis Bank — The Account Registry
+# Theme: Linear Structures, Big-O Notation, Stacks, and Hash Maps (Dicts)
+# Deliverable: registry.py
 
 from abc import ABC, abstractmethod
 
@@ -10,12 +11,10 @@ from abc import ABC, abstractmethod
 class Observer(ABC):
     @abstractmethod
     def update(self, message):
-        """Called when an account notifies its observers."""
         pass
 
 
 class SMSAlert(Observer):
-    """Observer that sends SMS alerts when account transactions happen."""
     def __init__(self, phone_number):
         self.phone_number = phone_number
 
@@ -24,7 +23,6 @@ class SMSAlert(Observer):
 
 
 class AlertService:
-    """SRP: Manages notifications outside of core account business logic."""
     def __init__(self):
         self._observers = []
 
@@ -41,7 +39,7 @@ class AlertService:
 
 
 # =====================================================================
-# 2. Base Class: Account (Inherits from AlertService for Observer pattern)
+# 2. Base Class: Account (with Transaction History Stack)
 # =====================================================================
 class Account(AlertService, ABC):
     def __init__(self, owner, account_number, balance=0.0):
@@ -49,6 +47,8 @@ class Account(AlertService, ABC):
         self.owner = owner
         self.account_number = account_number
         self.__balance = float(balance)
+        # Transaction History Stack (LIFO: Last In, First Out)
+        self.history_stack = []
 
     @property
     def balance(self):
@@ -61,7 +61,10 @@ class Account(AlertService, ABC):
         if amount <= 0:
             raise ValueError("Deposit amount must be positive!")
         self._adjust_balance(amount)
-        msg = f"Deposited {amount:,.2f} ETB into Account {self.account_number}. New Balance: {self.__balance:,.2f} ETB."
+        # Push transaction to stack
+        self.history_stack.append(("DEPOSIT", amount))
+        
+        msg = f"Deposited {amount:,.2f} ETB into Account {self.account_number}. Balance: {self.__balance:,.2f} ETB."
         print(msg)
         self._notify(msg)
 
@@ -71,7 +74,29 @@ class Account(AlertService, ABC):
         if amount > self.__balance:
             raise ValueError("Insufficient funds!")
         self._adjust_balance(-amount)
-        msg = f"Withdrew {amount:,.2f} ETB from Account {self.account_number}. New Balance: {self.__balance:,.2f} ETB."
+        # Push transaction to stack
+        self.history_stack.append(("WITHDRAW", amount))
+        
+        msg = f"Withdrew {amount:,.2f} ETB from Account {self.account_number}. Balance: {self.__balance:,.2f} ETB."
+        print(msg)
+        self._notify(msg)
+
+    def undo_last(self):
+        """Pops the most recent transaction from the history stack and reverts it."""
+        if not self.history_stack:
+            print("⚠️ No transactions to undo!")
+            return
+
+        # Pop from stack (LIFO)
+        tx_type, amount = self.history_stack.pop()
+        
+        if tx_type == "DEPOSIT":
+            self._adjust_balance(-amount)
+            msg = f"↩️ Undid Deposit of {amount:,.2f} ETB on Account {self.account_number}."
+        elif tx_type == "WITHDRAW":
+            self._adjust_balance(amount)
+            msg = f"↩️ Undid Withdrawal of {amount:,.2f} ETB on Account {self.account_number}."
+
         print(msg)
         self._notify(msg)
 
@@ -115,7 +140,10 @@ class CurrentAccount(Account):
         if amount > (self.balance + self.overdraft_limit):
             raise ValueError(f"Overdraft Limit of {self.overdraft_limit:,.2f} ETB Exceeded!")
         self._adjust_balance(-amount)
-        msg = f"Withdrew {amount:,.2f} ETB (Overdraft active) from Account {self.account_number}. New Balance: {self.balance:,.2f} ETB."
+        # Push transaction to stack
+        self.history_stack.append(("WITHDRAW", amount))
+        
+        msg = f"Withdrew {amount:,.2f} ETB (Overdraft active) from Account {self.account_number}. Balance: {self.balance:,.2f} ETB."
         print(msg)
         self._notify(msg)
 
@@ -127,10 +155,9 @@ class CurrentAccount(Account):
 
 
 # =====================================================================
-# 4. Design Pattern: AccountFactory
+# 4. AccountFactory
 # =====================================================================
 class AccountFactory:
-    """Factory to create accounts based on the 'kind' requested."""
     @staticmethod
     def create(kind, owner, account_number, balance=0.0, **kwargs):
         kind_lower = kind.lower()
@@ -144,27 +171,65 @@ class AccountFactory:
             raise ValueError(f"Unknown account kind: {kind}")
 
 
-# --- Test Run: Factory + Observer Pattern ---
+# =====================================================================
+# 5. Account Registry (O(1) Hash Table Lookup)
+# =====================================================================
+class AccountRegistry:
+    """Stores accounts in a dictionary for O(1) constant-time lookup."""
+    def __init__(self):
+        self._accounts = {}  # Dictionary key: account_number, value: Account object
+
+    def add(self, account):
+        """Adds an account to the registry."""
+        self._accounts[account.account_number] = account
+        print(f"Registered Account {account.account_number} for {account.owner}.")
+
+    def find(self, account_number):
+        """O(1) lookup by account number."""
+        return self._accounts.get(account_number, None)
+
+    def list_all(self):
+        """Lists all registered accounts ordered by account number."""
+        print("\n--- All Registered Accounts ---")
+        for acc_num in sorted(self._accounts.keys()):
+            acc = self._accounts[acc_num]
+            print(f"- [{acc_num}] Owner: {acc.owner} | Balance: {acc.balance:,.2f} ETB")
+
+
+# --- Test Run: Registry & Undo Stack ---
 if __name__ == "__main__":
-    print("--- Day 6: Addis Bank Refactored with Factory & Observer ---\n")
+    print("--- Day 7: Addis Bank Account Registry & Undo Stack ---\n")
 
-    # 1. Open accounts via the Factory
+    # 1. Initialize Registry
+    registry = AccountRegistry()
+
+    # 2. Create and Register Accounts via Factory
     acc1 = AccountFactory.create("savings", "Almaz", "SAV-101", 5000, interest_rate=0.06)
-    acc2 = AccountFactory.create("current", "Kassa", "CUR-202", 400, overdraft_limit=1500)
+    acc2 = AccountFactory.create("current", "Kassa", "CUR-202", 1000, overdraft_limit=1500)
 
-    # 2. Attach SMSAlert Observers
-    sms1 = SMSAlert("+251911223344")
-    sms2 = SMSAlert("+251922334455")
+    registry.add(acc1)
+    registry.add(acc2)
+
+    # 3. Test O(1) Lookup
+    print("\n--- Testing O(1) Lookup ---")
+    found_acc = registry.find("SAV-101")
+    if found_acc:
+        print(f"Found account for: {found_acc.owner}")
+
+    # 4. List all registered accounts
+    registry.list_all()
+
+    # 5. Test Stack & Undo Functionality
+    print("\n--- Testing Transaction Stack & Undo ---")
+    found_acc.deposit(2000)   # Balance -> 7000
+    found_acc.withdraw(1500)  # Balance -> 5500
     
-    acc1.subscribe(sms1)
-    acc2.subscribe(sms2)
-
-    # 3. Perform operations & see SMS Observer alerts trigger
-    print("\n--- Performing Transactions ---")
-    acc1.add_interest()
-    acc2.withdraw(800)
-
-    # 4. Output Statements
-    print("\n--- Displaying Statements ---")
-    acc1.statement()
-    acc2.statement()
+    print(f"Current Balance before undo: {found_acc.balance:,.2f} ETB")
+    
+    # Undo withdrawal
+    found_acc.undo_last()     # Balance -> 7000
+    print(f"Balance after 1st undo: {found_acc.balance:,.2f} ETB")
+    
+    # Undo deposit
+    found_acc.undo_last()     # Balance -> 5000
+    print(f"Balance after 2nd undo: {found_acc.balance:,.2f} ETB")
