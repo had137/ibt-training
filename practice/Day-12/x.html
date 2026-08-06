@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My First Website</title>
+</head>
+
+<body>
+
+    <!-- Section 1: Airtime Top-Up Form -->
+    <form action="/topup" method="post">
+        <label for="phone">Phone number</label>
+        <input id="phone" name="msisdn" type="tel" required>
+
+        <label for="amt">Amount (ETB)</label>
+        <input id="amt" name="amount" type="number" min="10">
+
+        <button type="submit">Top up</button>
+    </form>
+
+    <!-- Section 1 & 2: Delivery Address Fieldset & Selection Controls -->
+    <fieldset>
+        <legend>Delivery address</legend>
+        <label for="city">City</label>
+        <input id="city" name="city" value="Addis Ababa">
+
+        <label for="area">Sub-city</label>
+        <input id="area" name="area" placeholder="Bole / Kazanchis">
+    </fieldset>
+
+    <!-- label.for === input.id -->
+    <!-- Pick one of many -->
+    <select name="bank">
+        <option value="cbe">CBE</option>
+        <option value="awash">Awash Bank</option>
+        <option value="dashen">Dashen Bank</option>
+        <option value="zemen">Zemen Bank</option>
+        <option value="wegagen">Wegagen Bank</option>
+    </select>
+
+    <!-- Pick exactly one -->
+    <input type="radio" name="pay" value="telebirr">
+    <input type="radio" name="pay" value="cbebirr">
+
+    <!-- Pick any number -->
+    <input type="checkbox" name="sms">
+
+    <!-- Multi-line text -->
+    <textarea name="note" rows="3"></textarea>
+
+    <!-- Section 2 Worked Example: Beneficiary Registration -->
+    <form action="/beneficiaries" method="post">
+        <fieldset>
+            <legend>New beneficiary</legend>
+            <label for="name">Full name</label>
+            <input id="name" name="name" required autocomplete="name">
+
+            <label for="acct">Account number</label>
+            <input id="acct" name="acct" type="text" pattern="[0-9]{13}" required>
+
+            <label for="amt-beneficiary">Amount (ETB)</label>
+            <input id="amt-beneficiary" name="amt" type="number" min="1" step="0.01" required>
+        </fieldset>
+        <button type="submit">Save beneficiary</button>
+    </form>
+
+    <!-- Section 3: Branch Opening Hours Table -->
+    <table>
+        <caption>Addis branch opening hours</caption>
+        <thead>
+            <tr>
+                <th scope="col">Branch</th>
+                <th scope="col">Opens</th>
+                <th scope="col">Closes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">Bole</th>
+                <td>8:30</td>
+                <td>17:00</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Section 3 Worked Example: Flight Schedule Table -->
+    <table>
+        <caption>Ethiopian Airlines Domestic Flight Schedule</caption>
+        <thead>
+            <tr>
+                <th scope="col">Flight</th>
+                <th scope="col">Route</th>
+                <th scope="col">Departs</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">ET-118</th>
+                <td>Addis &#8594; Bahir Dar</td>
+                <td>06:40</td>
+                <td><span class="ontime">On time</span></td>
+            </tr>
+            <tr>
+                <th scope="row">ET-126</th>
+                <td>Addis &#8594; Gondar</td>
+                <td>07:15</td>
+                <td><span class="ontime">On time</span></td>
+            </tr>
+            <tr>
+                <th scope="row">ET-130</th>
+                <td>Addis &#8594; Mekelle</td>
+                <td>09:00</td>
+                <td><span class="delay">Delayed</span></td>
+            </tr>
+            <tr>
+                <th scope="row">ET-142</th>
+                <td>Addis &#8594; Dire Dawa</td>
+                <td>11:30</td>
+                <td><span class="ontime">On time</span></td>
+            </tr>
+            <tr>
+                <th scope="row">ET-160</th>
+                <td>Addis &#8594; Lalibela</td>
+                <td>13:45</td>
+                <td><span class="boarding">Boarding</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Section 4: Responsive & Accessible Media -->
+    <img src="rock-church.jpg" alt="Bete Giyorgis rock-hewn church in Lalibela" width="640" height="400" loading="lazy">
+    
+    <img srcset="hero-480.jpg 480w, hero-960.jpg 960w" sizes="(max-width:600px) 480px, 960px" src="hero-960.jpg"
+        alt="Cross-shaped monolithic church of Bete Giyorgis">
+    
+    <!-- Tourism Page Block -->
+    <section aria-labelledby="lalibela">
+        <h2 id="lalibela">Visit Lalibela</h2>
+        <figure>
+            <img src="rock-church.jpg" alt="Rock-hewn church of St George" loading="lazy">
+            <figcaption>Bete Giyorgis</figcaption>
+        </figure>
+        <iframe src="https://maps.google.com/maps?q=Church+of+Saint+George+Lalibela&t=&z=15&ie=UTF8&iwloc=&output=embed"
+            title="Map to Lalibela" loading="lazy"></iframe>
+    </section>
+</body>
+
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Reserve a table at Habesha Eatery for authentic Ethiopian cuisine, view our menu, and find our restaurant location.">
+    <title>Habesha Eatery - Reservation & Menu</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Semantic Landmark: Header -->
+    <header>
+        <h1>Habesha Eatery</h1>
+        <!-- Semantic Landmark: Nav -->
+        <nav aria-label="Main Navigation">
+            <ul>
+                <li><a href="#reservation">Reserve a Table</a></li>
+                <li><a href="#menu">Our Menu</a></li>
+                <li><a href="#location">Find Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Semantic Landmark: Main -->
+    <main>
+
+        <!-- Section 1: Reservation Form -->
+        <section id="reservation" aria-labelledby="reservation-heading">
+            <h2 id="reservation-heading">Table Reservation</h2>
+            <form action="/submit-reservation" method="post">
+                <fieldset>
+                    <legend>Reservation Details</legend>
+
+                    <label for="full-name">Full Name</label>
+                    <input id="full-name" name="name" type="text" required autocomplete="name">
+
+                    <label for="email">Email Address</label>
+                    <input id="email" name="email" type="email" required autocomplete="email">
+
+                    <label for="phone">Phone Number</label>
+                    <input id="phone" name="tel" type="tel" required autocomplete="tel">
+
+                    <label for="res-date">Reservation Date</label>
+                    <input id="res-date" name="date" type="date" required>
+
+                    <label for="party-size">Party Size (Number of Guests)</label>
+                    <input id="party-size" name="party-size" type="number" min="1" max="20" required>
+
+                    <label for="special-requests">Special Requests</label>
+                    <textarea id="special-requests" name="special-requests" rows="4"
+                        placeholder="Dietary requirements, seating preferences, etc."></textarea>
+                </fieldset>
+
+                <button type="submit">Confirm Reservation</button>
+            </form>
+        </section>
+
+        <!-- Section 2: Menu Table -->
+        <section id="menu" aria-labelledby="menu-heading">
+            <h2 id="menu-heading">Featured Menu</h2>
+            <table>
+                <caption>Habesha Eatery Menu Selection</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Dish</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Price (ETB)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Doro Wat</th>
+                        <td>Spiced chicken stew cooked with berbere and served with boiled egg</td>
+                        <td>350 ETB</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Special Kitfo</th>
+                        <td>Minced raw beef marinated in mitmita and niter kibbeh</td>
+                        <td>400 ETB</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Veggie Combo (Yetsom Beyaynetu)</th>
+                        <td>Assorted lentils, split peas, greens, and cabbage served on injera</td>
+                        <td>280 ETB</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Beef Tibs</th>
+                        <td>Sautéed beef strips with onions, garlic, and jalapenos</td>
+                        <td>380 ETB</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section 3: Media Block (Image + Map iframe) -->
+        <section id="location" aria-labelledby="location-heading">
+            <h2 id="location-heading">Location & Signature Dish</h2>
+
+            <figure>
+                <img src="assets/doro-wat.jpg"
+                    alt="A traditional platter of Ethiopian Injera served with rich spicy chicken stew (Doro Wat) and boiled eggs"
+                    width="600" height="400" loading="lazy">
+                <figcaption>Our Authentic Ethiopian Doro Wat Platter</figcaption>
+            </figure>
+
+            <div class="map-container">
+                <h3>Visit Us</h3>
+                <iframe src="https://maps.google.com/maps?q=Bole+Road+Addis+Ababa&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                    title="Interactive Google Map showing the location of Habesha Eatery in Addis Ababa" width="100%"
+                    height="350" loading="lazy"></iframe>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Semantic Landmark: Footer -->
+    <footer>
+        <p>&copy; 2026 Habesha Eatery. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>
